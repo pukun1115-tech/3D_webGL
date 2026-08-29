@@ -18,8 +18,19 @@
 </head>
 
 <body>
-    <canvas id="canvas"></canvas>
-    <canvas id="glcanvas"></canvas>
+    <div>
+        <style>
+            #glcanvas,
+            #canvas {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+        </style>
+        <canvas id="glcanvas"></canvas>
+        <canvas id="canvas"></canvas>
+    </div>
+
 
     <script src="chunk.js"></script>
     <script src="move.js"></script>

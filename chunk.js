@@ -98,42 +98,18 @@ class chunk {
         }
     }
 
-    // 三角形を重心とカメラの距離でソートする
-    sortTriangles() {
-        this.triangles.sort((a, b) => {
-            // 三角形の重心を計算
-            const ac = {
-                x: (a.verts[0].x + a.verts[1].x + a.verts[2].x) / 3,
-                y: (a.verts[0].y + a.verts[1].y + a.verts[2].y) / 3,
-                z: (a.verts[0].z + a.verts[1].z + a.verts[2].z) / 3,
-            };
-            const bc = {
-                x: (b.verts[0].x + b.verts[1].x + b.verts[2].x) / 3,
-                y: (b.verts[0].y + b.verts[1].y + b.verts[2].y) / 3,
-                z: (b.verts[0].z + b.verts[1].z + b.verts[2].z) / 3,
-            };
-
-            //カメラからの距離(**は2乗)(三平方の定理)
-            const ad = (
-                Math.abs(ac.x - camera.pos.x) +
-                Math.abs(ac.y - camera.pos.y) +
-                Math.abs(ac.z - camera.pos.z)
-            );
-
-            const bd = (
-                Math.abs(bc.x - camera.pos.x) +
-                Math.abs(bc.y - camera.pos.y) +
-                Math.abs(bc.z - camera.pos.z)
-            );
-
-            return bd - ad;//bd > adの時正の値を返す => bdが前に来る
-        });
-    }
-
     isAir(x, y, z) {
         if (x < 0 || y < 0 || z < 0 || x >= data.chunk.x || y >= data.chunk.y || z >= data.chunk.z) {
             return true;//チャンク外は空気扱い
         }
         return (this.map[x][y][z] === 0);
+    }
+
+    updateVBO() {
+        //
+    }
+
+    drawGL() {
+        //
     }
 }

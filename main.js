@@ -1,6 +1,9 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+const glCanvas = document.getElementById("glcanvas");
+const gl = glCanvas.getContext("webgl");
+
 const keys = {};//キーの状態
 document.addEventListener("keydown", e => keys[e.code] = true);//キーが押された時
 document.addEventListener("keyup", e => keys[e.code] = false);//キーが押されてない時
@@ -101,6 +104,11 @@ for (let i = 0; i < 1; i++) {
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    glCanvas.width = window.innerWidth;
+    glCanvas.height = window.innerHeight;
+
+    gl.viewport(0, 0, glCanvas.width, glCanvas.height);
 }
 
 //度数法からラジアンに変換
@@ -108,29 +116,22 @@ function degToRad(d) {
     return d * Math.PI / 180;
 }
 
-//チャンクをカメラからの距離でソート
-function sortChunks() {
-    chunks.sort((a, b) => {
-        //カメラからの距離(a or b distance)
-        const ad = (
-            Math.abs((a.x * data.chunk.x + (data.chunk.x) / 2) - camera.pos.x) +
-            Math.abs((a.z * data.chunk.z + (data.chunk.z) / 2) - camera.pos.z)
-        );
-
-        const bd = (
-            Math.abs((b.x * data.chunk.x + (data.chunk.x) / 2) - camera.pos.x) +
-            Math.abs((b.z * data.chunk.z + (data.chunk.z) / 2) - camera.pos.z)
-        );
-
-        return bd - ad;//bd > adの時正の値を返す => bdが前に来る
-    });
-}
-
 let frameCount = 0;
 let lastFpsTime = performance.now();
 let fps = 0;
 
-function zBufferLoop(now) {
+function calculateFPS(now) {
+    frameCount++;
+    // 0.1秒ごとにFPS(一秒あたりの処理数)を更新
+    if (now - lastFpsTime >= 100) {
+        //小数第(0の数)位まで
+        fps = Math.round(((frameCount * 1000) / (now - lastFpsTime)) * 10000) / 10000;
+        frameCount = 0;
+        lastFpsTime = now;
+    }
+}
+
+function mainLoop(now) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     camera.rot.xRad = degToRad(camera.rot.x);
@@ -158,17 +159,9 @@ function zBufferLoop(now) {
 
     chunkDraw();
 
-    frameCount++;
+    calculateFPS(now);
 
-    // 0.1秒ごとにFPS(一秒あたりの処理数)を更新
-    if (now - lastFpsTime >= 100) {
-        //小数第(0の数)位まで
-        fps = Math.round((frameCount * 1000 / (now - lastFpsTime)) * 10000) / 10000;
-        frameCount = 0;
-        lastFpsTime = now;
-    }
-
-    requestAnimationFrame(zBufferLoop);
+    requestAnimationFrame(mainLoop);
 }
 
 function startGame() {
@@ -176,7 +169,7 @@ function startGame() {
         c.generateTriangles();
     };
     resize();
-    zBufferLoop();
+    mainLoop();
 }
 
 startGame();
