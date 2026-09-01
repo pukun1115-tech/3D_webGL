@@ -114,7 +114,7 @@ window.addEventListener("blur", () => {
 });
 
 //キャンバスがクリックされた時
-canvas.addEventListener("mousedown", e => {
+canvas.addEventListener("mousedown", (e) => {
     if (document.pointerLockElement !== canvas) return;
 
     if (e.button === 0) {
@@ -150,7 +150,7 @@ let triangle_count = 0;
 
 const data = {
     chunk: { x: 16, y: 32, z: 16 },
-    gravity: -0.01,
+    gravity: -0.008,
     mouseSensitivity: 0.03
 };
 
@@ -167,9 +167,9 @@ const player = {
 
 const camera = {
     pos: { x: player.pos.x, y: player.pos.y + 1.6, z: player.pos.z + 0.3 },
-    //y:90で右を向く
-    //x:90で下を向く
-    //z:90でカメラが反時計回り
+    //y:90で
+    //x:90で
+    //z:90で
     rot: { x: 0, y: 0, z: 0, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
     FOV: 90,
     radFOV: null,
@@ -231,15 +231,14 @@ function mainLoop(now) {
 
     camera.radFOV = degToRad(camera.FOV);
 
-    // minMatrix.js を用いた行列関連処理
-    // matIVオブジェクトを生成
+    //-----行列関連処理-----
+    //matIVオブジェクトを生成
     const m = new matIV();
 
-    // 各種行列の生成と初期化
     const mMatrix = m.identity(m.create());
     const vMatrix = m.identity(m.create());
     const pMatrix = m.identity(m.create());
-    //uniformに渡す
+    //uniformに渡す行列
     const mvpMatrix = m.identity(m.create());
 
     //ビュー座標変換行列
@@ -250,33 +249,33 @@ function mainLoop(now) {
         y: camera.rot.cosZ,
         z: 0
     };
-    // X軸逆回転
+    //X軸逆回転
     let up2 = {
         x: up.x,
         y: up.y * camera.rot.cosX,
         z: up.y * camera.rot.sinX
     };
-    // Y軸逆回転
+    //Y軸逆回転
     let up3 = {
         x: up2.x * camera.rot.cosY + up2.z * camera.rot.sinY,
         y: up2.y,
         z: -up2.x * camera.rot.sinY + up2.z * camera.rot.cosY
     };
 
-    // カメラローカル(0,0,-1)をワールド座標に逆変換してターゲットを計算
-    // Z軸逆回転
+    //カメラローカル(0,0,-1)をワールド座標に逆変換してターゲットを計算
+    //Z軸逆回転
     let forward = {
         x: 0,
         y: 0,
         z: -1
     };
-    // X軸逆回転
+    //X軸逆回転
     let forward2 = {
         x: 0,
         y: -forward.z * camera.rot.sinX,
         z: forward.z * camera.rot.cosX
     };
-    // Y軸逆回転
+    //Y軸逆回転
     let forward3 = {
         x: forward2.z * camera.rot.sinY,
         y: forward2.y,
@@ -288,7 +287,7 @@ function mainLoop(now) {
         [up3.x, up3.y, up3.z], vMatrix);
 
     //プロジェクション座標変換行列
-    m.perspective(90, glCanvas.width / glCanvas.height, 0.01, 100, pMatrix);
+    m.perspective(camera.FOV, glCanvas.width / glCanvas.height, 0.01, 100, pMatrix);
 
     //各行列を掛け合わせ座標変換行列を完成させる
     m.multiply(pMatrix, vMatrix, mvpMatrix);
