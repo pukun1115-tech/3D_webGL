@@ -5,30 +5,28 @@ const glCanvas = document.getElementById("glcanvas");
 const gl = glCanvas.getContext("webgl");
 
 const keys = {};//キーの状態
-document.addEventListener("keydown", e => keys[e.code] = true);//キーが押された時
-document.addEventListener("keyup", e => keys[e.code] = false);//キーが押されてない時
+document.addEventListener("keydown", (e) => {keys[e.code] = true;});//キーが押された時
+document.addEventListener("keyup", (e) => {keys[e.code] = false;});//キーが押されてない時
 
 canvas.addEventListener("click", () => {
-    //マウス固定
-    canvas.requestPointerLock();
+    canvas.requestPointerLock();//ポインター固定
 });
-
-//マウス固定を解除する関数
-function releasePointerLock() {
-    if (document.pointerLockElement === canvas) {
-        document.exitPointerLock();
-    }
-}
 
 //みえるようになったり見えなくなったりしたとき
 document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
-        releasePointerLock();
+        if (document.pointerLockElement === canvas) {
+            document.exitPointerLock();
+        }
     }
 });
 
 //フォーカスが外れたとき
-window.addEventListener("blur", releasePointerLock);
+window.addEventListener("blur", () => {
+    if (document.pointerLockElement === canvas) {
+        document.exitPointerLock();
+    }
+});
 
 //キャンバスがクリックされた時
 canvas.addEventListener("mousedown", e => {
@@ -43,11 +41,10 @@ canvas.addEventListener("mousedown", e => {
 });
 
 //右クリックでメニューが出ない
-canvas.addEventListener("contextmenu", e => e.preventDefault());
+canvas.addEventListener("contextmenu", (e) => {e.preventDefault();});
 
 //カメラの向きを変える
-document.addEventListener("mousemove", e => {
-    //マウス固定されてる?
+document.addEventListener("mousemove", (e) => {
     if (document.pointerLockElement !== canvas) return;
 
     camera.rot.y += e.movementX * data.mouseSensitivity;
@@ -56,11 +53,12 @@ document.addEventListener("mousemove", e => {
     camera.rot.x = Math.max(-90, Math.min(90, camera.rot.x));
 });
 
-//画面の大きさを変える
-window.addEventListener("resize", resize);
+window.addEventListener("resize", () => {resize();});
 
 //チャンク
 let chunks = [];
+let vertex_position = [];
+let vertex_color = [];
 
 const data = {
     chunk: { x: 16, y: 32, z: 16 },
@@ -113,7 +111,7 @@ function resize() {
 
 //度数法からラジアンに変換
 function degToRad(d) {
-    return d * Math.PI / 180;
+    return d * (Math.PI / 180);
 }
 
 let frameCount = 0;
@@ -133,6 +131,7 @@ function calculateFPS(now) {
 
 function mainLoop(now) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     camera.rot.xRad = degToRad(camera.rot.x);
     camera.rot.yRad = degToRad(camera.rot.y);
@@ -152,7 +151,7 @@ function mainLoop(now) {
 
     //描画
 
-    if (!zBuffer || zBuffer.length !== canvas.width * canvas.height) {
+    if (!zBuffer || (zBuffer.length !== canvas.width * canvas.height)) {
         zBuffer = new Float32Array(canvas.width * canvas.height);
     }
     zBuffer.fill(0);
@@ -165,6 +164,8 @@ function mainLoop(now) {
 }
 
 function startGame() {
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearDepth(1.0);
     for (const c of chunks) {
         c.generateTriangles();
     };
