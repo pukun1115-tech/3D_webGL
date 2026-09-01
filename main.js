@@ -168,6 +168,9 @@ function startGame() {
     gl.clearDepth(1.0);
     for (const c of chunks) {
         c.generateTriangles();
+        for (const t of c.triangles) {
+            //
+        }
     };
     resize();
     mainLoop();
