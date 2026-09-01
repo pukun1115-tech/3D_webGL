@@ -14,19 +14,29 @@ void main(void) {
     vColor = color;
     gl_Position = mvpMatrix * vec4(position, 1.0);
 }
-`
+`;
 
 const fs = `
 precision mediump float;
-varying vec4 vcolor;
+varying vec4 vColor;
 
 void main(void) {
-    gl_FragColor = vcolor;
+    gl_FragColor = vColor;
 }
-`
+`;
 
 const v_shader = create_shader(vs, "vs");
 const f_shader = create_shader(fs, "fs");
+
+const prg = create_program(v_shader, f_shader);
+
+const attLocation = new Array(2);
+attLocation[0] = gl.getAttribLocation(prg, "position");
+attLocation[1] = gl.getAttribLocation(prg, "color");
+
+const attStride = new Array(2);
+attStride[0] = 3;
+attStride[1] = 4;
 
 function create_shader(s, type) {
     let shader;
@@ -45,18 +55,43 @@ function create_shader(s, type) {
     gl.compileShader(shader);
 
     if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            return shader;
-    } 
+        return shader;
+    }
     else {
         alert(gl.getShaderInfoLog(shader));
         return null;
     }
 }
 
+function create_program(vs, fs) {
+    const program = gl.createProgram();
+
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+
+    gl.linkProgram(program);
+
+    if (gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        gl.useProgram(program);
+        return program;
+    } else {
+        alert(gl.getProgramInfoLog(program));
+        return null;
+    }
+}
+
+// VBOを生成する関数
+function create_vbo(data) {
+    const vbo = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    return vbo;
+}
 
 const keys = {};//キーの状態
-document.addEventListener("keydown", (e) => {keys[e.code] = true;});//キーが押された時
-document.addEventListener("keyup", (e) => {keys[e.code] = false;});//キーが押されてない時
+document.addEventListener("keydown", (e) => { keys[e.code] = true; });//キーが押された時
+document.addEventListener("keyup", (e) => { keys[e.code] = false; });//キーが押されてない時
 
 canvas.addEventListener("click", () => {
     canvas.requestPointerLock();//ポインター固定
@@ -91,19 +126,19 @@ canvas.addEventListener("mousedown", e => {
 });
 
 //右クリックでメニューが出ない
-canvas.addEventListener("contextmenu", (e) => {e.preventDefault();});
+canvas.addEventListener("contextmenu", (e) => { e.preventDefault(); });
 
 //カメラの向きを変える
 document.addEventListener("mousemove", (e) => {
     if (document.pointerLockElement !== canvas) return;
 
-    camera.rot.y += e.movementX * data.mouseSensitivity;
-    camera.rot.x += e.movementY * data.mouseSensitivity;
+    camera.rot.y -= e.movementX * data.mouseSensitivity;
+    camera.rot.x -= e.movementY * data.mouseSensitivity;
 
     camera.rot.x = Math.max(-90, Math.min(90, camera.rot.x));
 });
 
-window.addEventListener("resize", () => {resize();});
+window.addEventListener("resize", () => { resize(); });
 
 //チャンク
 let chunks = [];
@@ -111,6 +146,7 @@ let chunks = [];
 //webgl用
 let vertex_position = [];
 let vertex_color = [];
+let triangle_count = 0;
 
 const data = {
     chunk: { x: 16, y: 32, z: 16 },
@@ -123,7 +159,7 @@ const data = {
 //目の高さは1.6
 //player.pos.xは真ん中yは下端zは真ん中
 const player = {
-    pos: { x: 5, y: 8, z: 5, chunkX: null, chunkZ: null },
+    pos: { x: 0, y: 8, z: 0, chunkX: null, chunkZ: null },
     moveSpeed: 0.08,
     jumpSpeed: 0.15,
     velocityY: 0
@@ -134,18 +170,15 @@ const camera = {
     //y:90で右を向く
     //x:90で下を向く
     //z:90でカメラが反時計回り
-    rot: { x: 0, y: 45, z: 0, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
+    rot: { x: 0, y: 0, z: 0, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
     FOV: 90,
     radFOV: null,
     near: 0.05,
 };
 
-//zの大きさを入れる
-let zBuffer = null;
-
 //チャンク生成
-for (let i = 0; i < 1; i++) {
-    for (let j = 0; j < 1; j++) {
+for (let i = -2; i < 0; i++) {
+    for (let j = -2; j < 0; j++) {
         chunks.push(new chunk(i, j));
     }
 }
@@ -198,19 +231,86 @@ function mainLoop(now) {
 
     camera.radFOV = degToRad(camera.FOV);
 
+    // minMatrix.js を用いた行列関連処理
+    // matIVオブジェクトを生成
+    const m = new matIV();
+
+    // 各種行列の生成と初期化
+    const mMatrix = m.identity(m.create());
+    const vMatrix = m.identity(m.create());
+    const pMatrix = m.identity(m.create());
+    //uniformに渡す
+    const mvpMatrix = m.identity(m.create());
+
+    //ビュー座標変換行列
+    //カメラローカル(0,1,0)をワールド座標に逆変換して上方向ベクトルにする
+    //Z軸逆回転
+    let up = {
+        x: camera.rot.sinZ,
+        y: camera.rot.cosZ,
+        z: 0
+    };
+    // X軸逆回転
+    let up2 = {
+        x: up.x,
+        y: up.y * camera.rot.cosX,
+        z: up.y * camera.rot.sinX
+    };
+    // Y軸逆回転
+    let up3 = {
+        x: up2.x * camera.rot.cosY + up2.z * camera.rot.sinY,
+        y: up2.y,
+        z: -up2.x * camera.rot.sinY + up2.z * camera.rot.cosY
+    };
+
+    // カメラローカル(0,0,-1)をワールド座標に逆変換してターゲットを計算
+    // Z軸逆回転
+    let forward = {
+        x: 0,
+        y: 0,
+        z: -1
+    };
+    // X軸逆回転
+    let forward2 = {
+        x: 0,
+        y: -forward.z * camera.rot.sinX,
+        z: forward.z * camera.rot.cosX
+    };
+    // Y軸逆回転
+    let forward3 = {
+        x: forward2.z * camera.rot.sinY,
+        y: forward2.y,
+        z: forward2.z * camera.rot.cosY
+    };
+
+    m.lookAt([camera.pos.x, camera.pos.y, camera.pos.z],
+        [camera.pos.x + forward3.x, camera.pos.y + forward3.y, (camera.pos.z + forward3.z)],
+        [up3.x, up3.y, up3.z], vMatrix);
+
+    //プロジェクション座標変換行列
+    m.perspective(90, glCanvas.width / glCanvas.height, 0.01, 100, pMatrix);
+
+    //各行列を掛け合わせ座標変換行列を完成させる
+    m.multiply(pMatrix, vMatrix, mvpMatrix);
+    m.multiply(mvpMatrix, mMatrix, mvpMatrix);
+
+    //uniformLocationの取得
+    const uniLocation = gl.getUniformLocation(prg, "mvpMatrix");
+
+    //uniformLocationへ座標変換行列を登録
+    gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
+
+    gl.drawArrays(gl.TRIANGLES, 0, triangle_count * 3);
+
     //移動
     playerMove();
 
-    //描画
-
-    if (!zBuffer || (zBuffer.length !== canvas.width * canvas.height)) {
-        zBuffer = new Float32Array(canvas.width * canvas.height);
-    }
-    zBuffer.fill(0);
-
-    chunkDraw();
-
     calculateFPS(now);
+
+    ctx.fillStyle = "rgba(255, 255, 255, 1)";
+    ctx.fillText(`x:${player.pos.x}`, 10, 20);
+    ctx.fillText(`y:${player.pos.y}`, 10, 40);
+    ctx.fillText(`z:${player.pos.z}`, 10, 60);
 
     requestAnimationFrame(mainLoop);
 }
@@ -218,8 +318,12 @@ function mainLoop(now) {
 function startGame() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clearDepth(1.0);
+    gl.enable(gl.DEPTH_TEST);
+
     for (const c of chunks) {
         c.generateTriangles();
+    };
+    for (const c of chunks) {
         for (const t of c.triangles) {
             for (let i = 0; i < 3; i++) {
                 vertex_position.push(t.verts[i].x);
@@ -231,8 +335,23 @@ function startGame() {
                 vertex_color.push(t.color[2] / 255);
                 vertex_color.push(t.color[3]);
             }
+            triangle_count++;
         }
     };
+    // VBOの生成
+    const position_vbo = create_vbo(vertex_position);
+    const color_vbo = create_vbo(vertex_color);
+
+    // VBOをバインドし登録する(位置情報)
+    gl.bindBuffer(gl.ARRAY_BUFFER, position_vbo);
+    gl.enableVertexAttribArray(attLocation[0]);
+    gl.vertexAttribPointer(attLocation[0], attStride[0], gl.FLOAT, false, 0, 0);
+
+    // VBOをバインドし登録する(色情報)
+    gl.bindBuffer(gl.ARRAY_BUFFER, color_vbo);
+    gl.enableVertexAttribArray(attLocation[1]);
+    gl.vertexAttribPointer(attLocation[1], attStride[1], gl.FLOAT, false, 0, 0);
+
     resize();
     mainLoop();
 }

@@ -16,15 +16,15 @@ function playerMove() {
     //位置が動く
     if (keys["KeyW"]) {
         //x移動
-        nextX += +sinY * moveSpeed;
+        nextX += -sinY * moveSpeed;
         //z移動
-        nextZ += +cosY * moveSpeed;
+        nextZ += -cosY * moveSpeed;
     }
     if (keys["KeyS"]) {
         //x移動
-        nextX += -sinY * moveSpeed;
+        nextX += +sinY * moveSpeed;
         //z
-        nextZ += -cosY * moveSpeed;
+        nextZ += +cosY * moveSpeed;
     }
     if (keys["KeyA"]) {
         //x
