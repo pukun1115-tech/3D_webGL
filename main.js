@@ -57,6 +57,8 @@ window.addEventListener("resize", () => {resize();});
 
 //チャンク
 let chunks = [];
+
+//webgl用
 let vertex_position = [];
 let vertex_color = [];
 
@@ -169,7 +171,16 @@ function startGame() {
     for (const c of chunks) {
         c.generateTriangles();
         for (const t of c.triangles) {
-            //
+            for (let i = 0; i < 3; i++) {
+                vertex_position.push(t.verts[i].x);
+                vertex_position.push(t.verts[i].y);
+                vertex_position.push(t.verts[i].z);
+
+                vertex_color.push(t.color[0] / 255);
+                vertex_color.push(t.color[1] / 255);
+                vertex_color.push(t.color[2] / 255);
+                vertex_color.push(t.color[3]);
+            }
         }
     };
     resize();
