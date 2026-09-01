@@ -170,7 +170,7 @@ const camera = {
     //y:90で
     //x:90で
     //z:90で
-    rot: { x: 0, y: 0, z: 0, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
+    rot: { x: 60, y: 0, z: 0, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
     FOV: 90,
     radFOV: null,
     near: 0.05,
@@ -308,8 +308,10 @@ function mainLoop(now) {
 
     ctx.fillStyle = "rgba(255, 255, 255, 1)";
     ctx.fillText(`x:${player.pos.x}`, 10, 20);
-    ctx.fillText(`y:${player.pos.y}`, 10, 40);
-    ctx.fillText(`z:${player.pos.z}`, 10, 60);
+    ctx.fillText(`y:${player.pos.y}`, 10, 30);
+    ctx.fillText(`z:${player.pos.z}`, 10, 40);
+    ctx.fillText(`rotX:${camera.rot.x}`, 10, 50);
+    ctx.fillText(`rotY:${camera.rot.y}`, 10, 60);
 
     requestAnimationFrame(mainLoop);
 }
