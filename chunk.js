@@ -54,20 +54,20 @@ class chunk {
                         { x: bx + 1, y: by + 1, z: bz + 1 },
                     ];
 
-                    const color = "#ff0000";
-                    const color2 = "#00ff00";
-                    const color3 = "#0000ff";
+                    const color1 = [ 255, 0, 0, 1 ];
+                    const color2 = [ 0, 255, 0, 1 ];
+                    const color3 = [ 0, 0, 255, 1 ];
 
                     // 前面
                     if (this.isAir(x, y, z - 1)) {
-                        this.triangles.push({ verts: [v[0], v[1], v[2]], color: color });
-                        this.triangles.push({ verts: [v[1], v[3], v[2]], color: color });
+                        this.triangles.push({ verts: [v[0], v[1], v[2]], color: color1 });
+                        this.triangles.push({ verts: [v[1], v[3], v[2]], color: color1 });
                     }
 
                     // 背面
                     if (this.isAir(x, y, z + 1)) {
-                        this.triangles.push({ verts: [v[4], v[6], v[5]], color: color });
-                        this.triangles.push({ verts: [v[5], v[6], v[7]], color: color });
+                        this.triangles.push({ verts: [v[4], v[6], v[5]], color: color1 });
+                        this.triangles.push({ verts: [v[5], v[6], v[7]], color: color1 });
                     }
 
                     // 左
