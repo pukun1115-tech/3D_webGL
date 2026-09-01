@@ -6,7 +6,7 @@ function chunkDraw() {
             const v2 = worldToCamera(tri.verts[1]);
             const v3 = worldToCamera(tri.verts[2]);
 
-            const cliped = clip3DTriangle(v1, v2, v3, tri.color);
+            const cliped = clip3DTriangle(v1, v2, v3, `rgba(${tri.color[0]}, ${tri.color[1]}, ${tri.color[2]}, ${tri.color[3]})`);
             for (const t of cliped) {
                 const a = projectPoint(t.verts[0]);
                 const b = projectPoint(t.verts[1]);
