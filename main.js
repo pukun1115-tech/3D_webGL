@@ -168,9 +168,9 @@ const player = {
 const camera = {
     pos: { x: player.pos.x, y: player.pos.y + 1.6, z: player.pos.z + 0.3 },
     //y:90で
-    //x:90で
+    //x:正で上を向く
     //z:90で
-    rot: { x: 60, y: 0, z: 0, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
+    rot: { x: 20, y: 45, z: 0, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
     FOV: 90,
     radFOV: null,
     near: 0.05,
