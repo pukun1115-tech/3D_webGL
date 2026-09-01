@@ -167,12 +167,11 @@ const player = {
 
 const camera = {
     pos: { x: player.pos.x, y: player.pos.y + 1.6, z: player.pos.z + 0.3 },
-    //y:90で
+    //y:正で左
     //x:正で上を向く
-    //z:90で
+    //z:正で?
     rot: { x: 20, y: 45, z: 0, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
     FOV: 90,
-    radFOV: null,
     near: 0.05,
 };
 
@@ -228,8 +227,6 @@ function mainLoop(now) {
     camera.rot.cosY = Math.cos(camera.rot.yRad);
     camera.rot.sinZ = Math.sin(camera.rot.zRad);
     camera.rot.cosZ = Math.cos(camera.rot.zRad);
-
-    camera.radFOV = degToRad(camera.FOV);
 
     //-----行列関連処理-----
     //matIVオブジェクトを生成
