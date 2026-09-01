@@ -4,6 +4,56 @@ const ctx = canvas.getContext("2d");
 const glCanvas = document.getElementById("glcanvas");
 const gl = glCanvas.getContext("webgl");
 
+const vs = `
+attribute vec3 position;
+attribute vec4 color;
+uniform mat4 mvpMatrix;
+varying vec4 vColor;
+
+void main(void) {
+    vColor = color;
+    gl_Position = mvpMatrix * vec4(position, 1.0);
+}
+`
+
+const fs = `
+precision mediump float;
+varying vec4 vcolor;
+
+void main(void) {
+    gl_FragColor = vcolor;
+}
+`
+
+const v_shader = create_shader(vs, "vs");
+const f_shader = create_shader(fs, "fs");
+
+function create_shader(s, type) {
+    let shader;
+    switch (type) {
+        case "vs":
+            shader = gl.createShader(gl.VERTEX_SHADER);
+            break;
+        case "fs":
+            shader = gl.createShader(gl.FRAGMENT_SHADER);
+            break;
+        default:
+            return null;
+    }
+
+    gl.shaderSource(shader, s);
+    gl.compileShader(shader);
+
+    if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            return shader;
+    } 
+    else {
+        alert(gl.getShaderInfoLog(shader));
+        return null;
+    }
+}
+
+
 const keys = {};//キーの状態
 document.addEventListener("keydown", (e) => {keys[e.code] = true;});//キーが押された時
 document.addEventListener("keyup", (e) => {keys[e.code] = false;});//キーが押されてない時
