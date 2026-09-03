@@ -54,9 +54,9 @@ class chunk {
                         { x: bx + 1, y: by + 1, z: bz + 1 },
                     ];
 
-                    const color1 = [ 255, 0, 0, 1 ];
-                    const color2 = [ 0, 255, 0, 1 ];
-                    const color3 = [ 0, 0, 255, 1 ];
+                    const color1 = [0, 255, 255, 1];
+                    const color2 = [255, 0, 255, 1];
+                    const color3 = [255, 255, 0, 1];
 
                     // 前面
                     if (this.isAir(x, y, z - 1)) {

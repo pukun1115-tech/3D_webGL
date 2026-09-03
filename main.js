@@ -168,14 +168,14 @@ const player = {
 const camera = {
     pos: { x: player.pos.x, y: player.pos.y + 1.6, z: player.pos.z + 0.3 },
     //親指を?軸正方向に向けた時指が巻く方が?軸回転正方向
-    rot: { x: -30, y: 45, z: 0, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
+    rot: { x: 0, y: 90, z: 0, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
     FOV: 90,
     near: 0.05,
 };
 
 //チャンク生成
-for (let i = -2; i < 0; i++) {
-    for (let j = -2; j < 0; j++) {
+for (let i = -3; i <= 6; i++) {
+    for (let j = -3; j <= 6; j++) {
         chunks.push(new chunk(i, j));
     }
 }
@@ -237,49 +237,17 @@ function mainLoop(now) {
     const mvpMatrix = m.identity(m.create());
 
     //ビュー座標変換行列
-    //カメラローカル(0,1,0)をワールド座標に逆変換して上方向ベクトルにする
-    //Z軸逆回転
-    let up = {
-        x: camera.rot.sinZ,
-        y: camera.rot.cosZ,
-        z: 0
-    };
-    //X軸逆回転
-    let up2 = {
-        x: up.x,
-        y: up.y * camera.rot.cosX,
-        z: up.y * camera.rot.sinX
-    };
-    //Y軸逆回転
-    let up3 = {
-        x: up2.x * camera.rot.cosY + up2.z * camera.rot.sinY,
-        y: up2.y,
-        z: -up2.x * camera.rot.sinY + up2.z * camera.rot.cosY
-    };
-
+    //カメラローカル(0,1,0)をワールド座標に逆変換して上方向ベクトルたすカメラ座標にする
+    const u = cameraToWorld({ x: 0, y: 1, z: 0 });
     //カメラローカル(0,0,-1)をワールド座標に逆変換してターゲットを計算
-    //Z軸逆回転
-    let forward = {
-        x: 0,
-        y: 0,
-        z: -1
-    };
-    //X軸逆回転
-    let forward2 = {
-        x: 0,
-        y: -forward.z * camera.rot.sinX,
-        z: forward.z * camera.rot.cosX
-    };
-    //Y軸逆回転
-    let forward3 = {
-        x: forward2.z * camera.rot.sinY,
-        y: forward2.y,
-        z: forward2.z * camera.rot.cosY
-    };
+    const s = cameraToWorld({ x: 0, y: 0, z: -1 });
 
-    m.lookAt([camera.pos.x, camera.pos.y, camera.pos.z],
-        [camera.pos.x + forward3.x, camera.pos.y + forward3.y, (camera.pos.z + forward3.z)],
-        [up3.x, up3.y, up3.z], vMatrix);
+    m.lookAt(
+        [camera.pos.x, camera.pos.y, camera.pos.z],
+        [s.x, s.y, s.z],
+        [u.x - camera.pos.x, u.y - camera.pos.y, u.z - camera.pos.z],
+        vMatrix
+    );
 
     //プロジェクション座標変換行列
     m.perspective(camera.FOV, glCanvas.width / glCanvas.height, 0.01, 100, pMatrix);

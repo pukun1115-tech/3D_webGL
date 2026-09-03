@@ -50,12 +50,16 @@ function playerMove() {
 
 
     //地面の上か
-    const onGround = atari(player.pos.x, player.pos.y - 0.002, player.pos.z)
+    const onGround = isOnGround(player.pos.x, player.pos.y, player.pos.z);
 
     //重力を加える
     player.velocityY += data.gravity;
 
     if (onGround) {
+        //接地中は重力で沈み続けないようにする
+        if (player.velocityY < 0) {
+            player.velocityY = 0;
+        }
         //ジャンプ
         if (keys["Space"]) {
             player.velocityY = player.jumpSpeed;
@@ -69,7 +73,7 @@ function playerMove() {
             //地面についていたら下向きのスピード0
             player.velocityY = 0;
             //地面に触れている間上に0.001ずつあげる
-            nextY += 0.001;
+            nextY += 0.002;
         }
     }
     else if (player.velocityY > 0) {
@@ -99,6 +103,11 @@ function playerMove() {
     }
 
     camera.pos = { x: player.pos.x, y: player.pos.y + 1.6, z: player.pos.z };
+}
+
+//プレイヤーの足元がブロックに触れているか
+function isOnGround(px, py, pz) {
+    return atari(px, py - 0.002, pz);
 }
 
 //プレイヤーが空中にいるか
