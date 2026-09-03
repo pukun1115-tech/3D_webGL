@@ -270,6 +270,7 @@ function mainLoop(now) {
     calculateFPS(now);
 
     ctx.fillStyle = "rgba(255, 255, 255, 1)";
+    ctx.fillText(`fps:${fps}`, 10, 10);
     ctx.fillText(`x:${player.pos.x}`, 10, 20);
     ctx.fillText(`y:${player.pos.y}`, 10, 30);
     ctx.fillText(`z:${player.pos.z}`, 10, 40);
