@@ -6,7 +6,7 @@ function placeBlock() {
     const direction = {
         x: Math.sin(rotY) * Math.cos(rotX),
         y: -Math.sin(rotX),
-        z: Math.cos(rotY) * Math.cos(rotX)
+        z: -Math.cos(rotY) * Math.cos(rotX)  // ✅ マイナス符号を追加
     };
 
     let previousBlock = null;
@@ -78,7 +78,7 @@ function breakBlock() {
     const direction = {
         x: Math.sin(rotY) * Math.cos(rotX),
         y: -Math.sin(rotX),
-        z: Math.cos(rotY) * Math.cos(rotX)
+        z: -Math.cos(rotY) * Math.cos(rotX)
     };
 
     const rayStep = 0.05;
