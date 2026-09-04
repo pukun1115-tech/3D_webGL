@@ -6,7 +6,7 @@ breakB.addEventListener("click", () => {
 
 const jumpB = document.getElementById("jump");
 
-jumpB.addEventListener("click", () => {
+jumpB.addEventListener("pointerdown", () => {
     const fakeKeyEvent = new KeyboardEvent(
         "keydown",
         {
@@ -17,6 +17,35 @@ jumpB.addEventListener("click", () => {
         }
     );
 
+    document.dispatchEvent(fakeKeyEvent);
+});
+
+jumpB.addEventListener("pointerup", () => {
+    const fakeKeyEvent = new KeyboardEvent(
+        "keyup",
+        {
+            key: " ",
+            code: "Space",
+            bubbles: true,
+            cancelable: true
+        }
+    );
+
+    document.dispatchEvent(fakeKeyEvent);
+});
+
+const w = document.getElementById("w");
+
+w.addEventListener("pointerdown", () => {
+    const fakeKeyEvent = new KeyboardEvent(
+        "keydown",
+        {
+            key: "w",
+            code: "KeyW",
+            bubbles: true,
+            cancelable: true
+        }
+    );
     document.dispatchEvent(fakeKeyEvent);
 });
 
