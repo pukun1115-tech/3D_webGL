@@ -144,9 +144,9 @@ window.addEventListener("resize", () => { resize(); });
 let chunks = [];
 
 //webgl用
-let vertex_position = [];
-let vertex_color = [];
-let triangle_count = 0;
+let vertex_position;
+let vertex_color;
+let triangle_count;
 
 const data = {
     chunk: { x: 16, y: 32, z: 16 },
@@ -288,6 +288,16 @@ function startGame() {
     for (const c of chunks) {
         c.generateTriangles();
     };
+    generateMesh();
+    
+    resize();
+    mainLoop();
+}
+
+function generateMesh() {
+    triangle_count = 0;
+    vertex_position = [];
+    vertex_color = [];
     for (const c of chunks) {
         for (const t of c.triangles) {
             for (let i = 0; i < 3; i++) {
@@ -316,9 +326,6 @@ function startGame() {
     gl.bindBuffer(gl.ARRAY_BUFFER, color_vbo);
     gl.enableVertexAttribArray(attLocation[1]);
     gl.vertexAttribPointer(attLocation[1], attStride[1], gl.FLOAT, false, 0, 0);
-
-    resize();
-    mainLoop();
 }
 
 startGame();
