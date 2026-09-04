@@ -17,7 +17,7 @@ jumpB.addEventListener("click", () => {
         }
     );
 
-    window.dispatchEvent(fakeKeyEvent);
+    document.dispatchEvent(fakeKeyEvent);
 });
 
 const kisyuB = document.getElementById("kisyuB");
