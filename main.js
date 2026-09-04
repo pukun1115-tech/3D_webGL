@@ -182,11 +182,20 @@ for (let i = -3; i <= 6; i++) {
 
 //キャンバスの大きさ変更
 function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
 
-    glCanvas.width = window.innerWidth;
-    glCanvas.height = window.innerHeight;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    glcanvas.style.width = w + "px";
+    glcanvas.style.height = h + "px";
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+
+    glcanvas.width = w * dpr;
+    glcanvas.height = h * dpr;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
 
     gl.viewport(0, 0, glCanvas.width, glCanvas.height);
 }
