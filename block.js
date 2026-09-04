@@ -62,6 +62,7 @@ function placeBlock() {
                 return;
             }
             placeChunk.generateTriangles();
+            generateMesh();
             return;
         }
 
@@ -112,6 +113,7 @@ function breakBlock() {
 
         targetChunk.map[localX][localY][localZ] = 0;
         targetChunk.generateTriangles();
+        generateMesh();
         return;
     }
 }
