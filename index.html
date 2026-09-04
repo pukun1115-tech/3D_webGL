@@ -9,24 +9,25 @@
             margin: 0;
             padding: 0;
         }
-
         canvas {
             background: #00000000;
             display: block;
+        }
+        #glcanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
         }
     </style>
 </head>
 
 <body>
     <div>
-        <style>
-            #glcanvas,
-            #canvas {
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-        </style>
         <!--glcanvasの上にcanvas-->
         <canvas id="glcanvas"></canvas>
         <canvas id="canvas"></canvas>
