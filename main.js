@@ -182,7 +182,7 @@ for (let i = -3; i <= 6; i++) {
 
 //キャンバスの大きさ変更
 function resize() {
-    const dpr = 0.5;
+    const dpr = 0.25;
 
     const w = window.innerWidth;
     const h = window.innerHeight;
