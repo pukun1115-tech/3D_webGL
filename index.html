@@ -17,18 +17,25 @@
             position: absolute;
             top: 0;
             left: 0;
+            z-index: 1;
         }
         #canvas {
             position: absolute;
             top: 0;
             left: 0;
+            z-index: 2;
+        }
+        #breakB {
+            position: absolute;
+            top: 100;
+            left: 20;
+            z-index: 3;
         }
     </style>
 </head>
 
 <body>
     <div>
-        <!--glcanvasの上にcanvas-->
         <canvas id="glcanvas"></canvas>
         <canvas id="canvas"></canvas>
     </div>
