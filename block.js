@@ -2,16 +2,18 @@
 function placeBlock() {
     const rotX = degToRad(camera.rot.x);
     const rotY = degToRad(camera.rot.y);
-    //breakBlockと同じ
+
+    const t = cameraToWorld({x: 0, y: 0, z: -1});
+    
     const direction = {
-        x: Math.sin(rotY) * Math.cos(rotX),
-        y: -Math.sin(rotX),
-        z: -Math.cos(rotY) * Math.cos(rotX)  // ✅ マイナス符号を追加
+        x: t.x - camera.pos.x,
+        y: t.y - camera.pos.y,
+        z: t.z - camera.pos.z
     };
 
     let previousBlock = null;
     const rayStep = 0.05;
-    const rayDistance = 4;
+    const rayDistance = 8;
 
     for (let distance = 0; distance <= rayDistance; distance += rayStep) {
         const rayX = camera.pos.x + direction.x * distance;
@@ -76,14 +78,16 @@ function breakBlock() {
     const rotY = degToRad(camera.rot.y);
     //長さ1のベクトルというもの?
     //xyzにいくつ進むとななめに1進むか
+    const t = cameraToWorld({x: 0, y: 0, z: -1});
+    
     const direction = {
-        x: Math.sin(rotY) * Math.cos(rotX),
-        y: -Math.sin(rotX),
-        z: -Math.cos(rotY) * Math.cos(rotX)
+        x: t.x - camera.pos.x,
+        y: t.y - camera.pos.y,
+        z: t.z - camera.pos.z
     };
 
     const rayStep = 0.05;
-    const rayDistance = 4;
+    const rayDistance = 8;
 
     for (let distance = 0; distance <= rayDistance; distance += rayStep) {
         const rayX = camera.pos.x + direction.x * distance;
