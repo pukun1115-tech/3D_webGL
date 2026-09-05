@@ -73,7 +73,7 @@ ArrowUp.addEventListener("pointerdown", () => {
     camera.rot.x++;
 });
 ArrowDown.addEventListener("pointerdown", () => {
-    canera.rot.x--;
+    camera.rot.x--;
 });
 ArrowRight.addEventListener("pointerdown", () => {
     camera.rot.y--;
