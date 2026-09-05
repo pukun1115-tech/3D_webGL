@@ -293,6 +293,7 @@ function startGame() {
     gl.clearDepth(1.0);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
+    gl.frontFace(gl.CW);
 
     for (const c of chunks) {
         c.generateTriangles();
