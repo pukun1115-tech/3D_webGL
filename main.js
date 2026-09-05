@@ -170,6 +170,7 @@ const camera = {
     rot: { x: -40, y: 30, z: 0, up: false, down: false, right: false, left: false, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
     FOV: 90,
     near: 0.05,
+    far: 1000
 };
 
 //チャンク生成
@@ -181,7 +182,7 @@ for (let i = -3; i <= 6; i++) {
 
 //キャンバスの大きさ変更
 function resize() {
-    const dpr = 2;
+    const dpr = 1;
 
     const w = window.innerWidth;
     const h = window.innerHeight;
@@ -258,7 +259,7 @@ function mainLoop(now) {
     );
 
     //プロジェクション座標変換行列
-    m.perspective(camera.FOV, glCanvas.width / glCanvas.height, 0.01, 100, pMatrix);
+    m.perspective(camera.FOV, glCanvas.width / glCanvas.height, camera.near, camera.far, pMatrix);
 
     //各行列を掛け合わせ座標変換行列を完成させる
     m.multiply(pMatrix, vMatrix, mvpMatrix);
@@ -278,6 +279,7 @@ function mainLoop(now) {
     calculateFPS(now);
 
     ctx.fillStyle = "rgba(255, 255, 255, 1)";
+    ctx.font = "10px sans-serif";
     ctx.fillText(`fps:${fps}`, 10, 10);
     ctx.fillText(`x:${player.pos.x}`, 10, 20);
     ctx.fillText(`y:${player.pos.y}`, 10, 30);
@@ -285,7 +287,22 @@ function mainLoop(now) {
     ctx.fillText(`rotX:${camera.rot.x}`, 10, 50);
     ctx.fillText(`rotY:${camera.rot.y}`, 10, 60);
 
+    drawCrosshair();
+
     requestAnimationFrame(mainLoop);
+}
+
+function drawCrosshair() {
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.beginPath();
+    ctx.moveTo(w / 2 - 2, h / 2);
+    ctx.lineTo(w / 2 + 2, h / 2);
+    ctx.moveTo(w / 2, h / 2 - 2);
+    ctx.lineTo(w / 2, h / 2 + 2);
+    ctx.stroke();
 }
 
 function startGame() {
@@ -299,7 +316,7 @@ function startGame() {
         c.generateTriangles();
     };
     generateMesh();
-    
+
     resize();
     mainLoop();
 }
