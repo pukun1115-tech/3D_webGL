@@ -38,23 +38,30 @@
         .hidden {
             display: none !important;
         }
-        #breakB {
-            bottom: 40px;
-            left: 40px;
+        #breakB, #placeB, #w, #a, #s, #d, #ArrowUp, #ArrowDown, #ArrowRight, #ArrowLeft {
             width: 120px;
             height: 120px;
-            z-index: 3;
             background-color: #00000080;
             font-weight: bold;
             font-size: 40px;
             color: #ffffff;
+        }
+        #breakB {
+            bottom: 40px;
+            left: 40px;
+            z-index: 3;
+        }
+        #placeB {
+            bottom: 170px;
+            left: 40px;
+            z-index: 4;
         }
         #kisyuB {
             top: 40px;
             right: 40px;
             width: 120px;
             height: 60px;
-            z-index: 4;
+            z-index: 5;
             background-color: #00000080;
             font-weight: bold;
             font-size: 40px;
@@ -65,15 +72,7 @@
             right: 40px;
             width: 120px;
             height: 120px;
-            z-index: 5;
-            background-color: #00000080;
-            font-weight: bold;
-            font-size: 40px;
-            color: #ffffff;
-        }
-        #w, #a, #s, #d {
-            width: 120px;
-            height: 120px;
+            z-index: 6;
             background-color: #00000080;
             font-weight: bold;
             font-size: 40px;
@@ -82,22 +81,42 @@
         #w {
             bottom: 170px;
             left: 300px;
-            z-index: 6;
+            z-index: 7;
         }
         #a {
             bottom: 40px;
             left: 170px;
-            z-index: 7;
+            z-index: 8;
         }
         #s {
             bottom: 40px;
             left: 300px;
-            z-index: 8;
+            z-index: 9;
         }
         #d {
             bottom: 40px;
             left: 430px;
-            z-index: 8;
+            z-index: 10;
+        }
+        #ArrowUp {
+            bottom: 170px;
+            right: 300px;
+            z-index: 11;
+        }
+        #ArrowDown {
+            bottom: 40px;
+            right: 300px;
+            z-index: 12;
+        }
+        #ArrowRight {
+            bottom: 40px;
+            right: 170px;
+            z-index: 13;
+        }
+        #ArrowLeft {
+            bottom: 40px;
+            right: 430px;
+            z-index: 14;
         }
     </style>
 </head>
@@ -110,11 +129,16 @@
     <div>
         <button id="kisyuB" type="button">機種</button>
         <button id="breakB" type="button">壊す</button>
+        <button id="placeB" type="button">置く</button>
         <button id="jump" type="button">ジャンプ</button>
         <button id="w" type="button">w</button>
         <button id="a" type="button">a</button>
         <button id="s" type="button">s</button>
         <button id="d" type="button">d</button>
+        <button id="ArrowUp" type="button">↑</button>
+        <button id="ArrowDown" type="button">↓</button>
+        <button id="ArrowRight" type="button">→</button>
+        <button id="ArrowLeft" type="button">←</button>
     </div>
 
     <script src="minMatrix.js"></script>
