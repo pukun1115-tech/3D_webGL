@@ -1,55 +1,43 @@
 const breakB = document.getElementById("breakB");
+const jumpB = document.getElementById("jump");
+const wB = document.getElementById("w");
+const aB = document.getElementById("a");
+const sB = document.getElementById("s");
+const dB = document.getElementById("d");
+const kisyuB = document.getElementById("kisyuB");
+
+const spaceK = {
+    key: " ",
+    code: "Space",
+    bubbles: true,
+    cancelable: true
+};
+
+const wK = {
+    key: "w",
+    code: "KeyW",
+    bubbles: true,
+    cancelable: true
+};
+
 
 breakB.addEventListener("click", () => {
     breakBlock();
 });
 
-const jumpB = document.getElementById("jump");
-
 jumpB.addEventListener("pointerdown", () => {
-    const fakeKeyEvent = new KeyboardEvent(
-        "keydown",
-        {
-            key: " ",
-            code: "Space",
-            bubbles: true,
-            cancelable: true
-        }
-    );
-
+    const fakeKeyEvent = new KeyboardEvent("keydown", spaceK);
     document.dispatchEvent(fakeKeyEvent);
 });
-
 jumpB.addEventListener("pointerup", () => {
-    const fakeKeyEvent = new KeyboardEvent(
-        "keyup",
-        {
-            key: " ",
-            code: "Space",
-            bubbles: true,
-            cancelable: true
-        }
-    );
-
+    const fakeKeyEvent = new KeyboardEvent("keyup", spaceK);
     document.dispatchEvent(fakeKeyEvent);
 });
 
-const w = document.getElementById("w");
-
-w.addEventListener("pointerdown", () => {
-    const fakeKeyEvent = new KeyboardEvent(
-        "keydown",
-        {
-            key: "w",
-            code: "KeyW",
-            bubbles: true,
-            cancelable: true
-        }
-    );
+wB.addEventListener("pointerdown", () => {
+    const fakeKeyEvent = new KeyboardEvent("keydown", wK);
     document.dispatchEvent(fakeKeyEvent);
 });
-
-const kisyuB = document.getElementById("kisyuB");
 
 kisyuB.addEventListener("click", () => {
     breakB.classList.toggle("hidden");
