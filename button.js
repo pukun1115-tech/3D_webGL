@@ -1,13 +1,17 @@
 const breakB = document.getElementById("breakB");
+const placeB = document.getElementById("placeB");
 const jumpB = document.getElementById("jump");
 const wB = document.getElementById("w");
 const aB = document.getElementById("a");
 const sB = document.getElementById("s");
 const dB = document.getElementById("d");
+const ArrowUp = document.getElementById("ArrowUp");
+const ArrowDown = document.getElementById("ArrowDown");
+const ArrowRight = document.getElementById("ArrowRight");
+const ArrowLeft = document.getElementById("ArrowLeft");
 const kisyuB = document.getElementById("kisyuB");
 
 const spaceK = { key: " ", code: "Space", bubbles: true, cancelable: true };
-
 const wK = { key: "w", code: "KeyW", bubbles: true, cancelable: true };
 const aK = { key: "a", code: "KeyA", bubbles: true, cancelable: true };
 const sK = { key: "s", code: "KeyS", bubbles: true, cancelable: true };
@@ -15,6 +19,9 @@ const dK = { key: "d", code: "KeyD", bubbles: true, cancelable: true };
 
 breakB.addEventListener("click", () => {
     breakBlock();
+});
+placeB.addEventListener("click", () => {
+    placeBlock();
 });
 
 jumpB.addEventListener("pointerdown", () => {
@@ -62,11 +69,29 @@ dB.addEventListener("pointerup", () => {
     document.dispatchEvent(fakeKeyEvent);
 });
 
+ArrowUp.addEventListener("pointerdown", () => {
+    camera.rot.x++;
+});
+ArrowDown.addEventListener("pointerdown", () => {
+    canera.rot.x--;
+});
+ArrowRight.addEventListener("pointerdown", () => {
+    camera.rot.y--;
+});
+ArrowLeft.addEventListener("pointerdown", () => {
+    camera.rot.y++;
+});
+
 kisyuB.addEventListener("click", () => {
     breakB.classList.toggle("hidden");
+    placeB.classList.toggle("hidden");
     jumpB.classList.toggle("hidden");
     wB.classList.toggle("hidden");
     aB.classList.toggle("hidden");
     sB.classList.toggle("hidden");
     dB.classList.toggle("hidden");
+    ArrowUp.classList.toggle("hidden");
+    ArrowDown.classList.toggle("hidden");
+    ArrowRight.classList.toggle("hidden");
+    ArrowLeft.classList.toggle("hidden");
 });
