@@ -181,7 +181,7 @@ for (let i = -3; i <= 6; i++) {
 
 //キャンバスの大きさ変更
 function resize() {
-    const dpr = 0.25;
+    const dpr = 2;
 
     const w = window.innerWidth;
     const h = window.innerHeight;
@@ -292,6 +292,7 @@ function startGame() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clearDepth(1.0);
     gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
 
     for (const c of chunks) {
         c.generateTriangles();
