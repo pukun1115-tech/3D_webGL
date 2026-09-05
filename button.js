@@ -70,16 +70,31 @@ dB.addEventListener("pointerup", () => {
 });
 
 ArrowUp.addEventListener("pointerdown", () => {
-    camera.rot.x++;
+    camera.rot.up = true;
 });
+ArrowUp.addEventListener("pointerup", () => {
+    camera.rot.up = false;
+});
+
 ArrowDown.addEventListener("pointerdown", () => {
-    camera.rot.x--;
+    camera.rot.down = true;
 });
+ArrowDown.addEventListener("pointerup", () => {
+    camera.rot.down = false;
+});
+
 ArrowRight.addEventListener("pointerdown", () => {
-    camera.rot.y--;
+    camera.rot.right = true;
 });
+ArrowRight.addEventListener("pointerup", () => {
+    camera.rot.right = false;
+});
+
 ArrowLeft.addEventListener("pointerdown", () => {
-    camera.rot.y++;
+    camera.rot.left = true;
+});
+ArrowLeft.addEventListener("pointerup", () => {
+    camera.rot.left = false;
 });
 
 kisyuB.addEventListener("click", () => {
