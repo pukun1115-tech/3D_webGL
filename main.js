@@ -151,7 +151,8 @@ let triangle_count;
 const data = {
     chunk: { x: 16, y: 32, z: 16 },
     gravity: -0.008,
-    mouseSensitivity: 0.03
+    mouseSensitivity: 0.03,
+    kisyu: 0
 };
 
 //プレイヤー
