@@ -65,4 +65,8 @@ dB.addEventListener("pointerup", () => {
 kisyuB.addEventListener("click", () => {
     breakB.classList.toggle("hidden");
     jumpB.classList.toggle("hidden");
+    wB.classList.toggle("hidden");
+    aB.classList.toggle("hidden");
+    sB.classList.toggle("hidden");
+    dB.classList.toggle("hidden");
 });
