@@ -83,6 +83,7 @@ ArrowLeft.addEventListener("pointerdown", () => {
 });
 
 kisyuB.addEventListener("click", () => {
+    data.kisyu = 1 - data.kisyu;
     breakB.classList.toggle("hidden");
     placeB.classList.toggle("hidden");
     jumpB.classList.toggle("hidden");
