@@ -84,4 +84,15 @@ ArrowLeft.addEventListener("pointerdown", () => {
 
 kisyuB.addEventListener("click", () => {
     data.kisyu = 1 - data.kisyu;
+    breakB.classList.toggle("hidden");
+    placeB.classList.toggle("hidden");
+    jumpB.classList.toggle("hidden");
+    wB.classList.toggle("hidden");
+    aB.classList.toggle("hidden");
+    sB.classList.toggle("hidden");
+    dB.classList.toggle("hidden");
+    ArrowUp.classList.toggle("hidden");
+    ArrowDown.classList.toggle("hidden");
+    ArrowRight.classList.toggle("hidden");
+    ArrowLeft.classList.toggle("hidden");
 });
