@@ -94,13 +94,26 @@ function playerMove() {
     if (keys["KeyM"]) {
         camera.FOV--;
     }
+
+    if (data.kisyu === 1) {
+        if (camera.rot.up) {
+            camera.rot.x++;
+        }
+        if (camera.rot.down) {
+            camera.rot.x--;
+        }
+        if (camera.rot.right) {
+            camera.rot.y--;
+        }
+        if (camera.rot.left) {
+            camera.rot.y++;
+        }
+    }
+        
     //FOV制限
-    if (camera.FOV < 30) {
-        camera.FOV = 30;
-    }
-    if (camera.FOV > 120) {
-        camera.FOV = 120;
-    }
+    camera.FOV = Math.min(120, Math.max(30, camera.FOV));
+    //向き制限
+    camera.rot.x = Math.max(-90, Math.min(90, camera.rot.x));
 
     camera.pos = { x: player.pos.x, y: player.pos.y + 1.6, z: player.pos.z };
 }
