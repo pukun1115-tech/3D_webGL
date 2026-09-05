@@ -169,7 +169,7 @@ const player = {
 const camera = {
     pos: { x: player.pos.x, y: player.pos.y + 1.6, z: player.pos.z + 0.3 },
     //親指を?軸正方向に向けた時指が巻く方が?軸回転正方向
-    rot: { x: -40, y: 30, z: 0, nextX: null, nextY: null, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
+    rot: { x: -40, y: 30, z: 0, up: null, down: null, right: null, left: null, xRad: null, yRad: null, zRad: null, sinX: null, cosX: null, sinY: null, cosY: null, sinZ: null, cosZ: null },
     FOV: 90,
     near: 0.05,
 };
