@@ -134,8 +134,6 @@ document.addEventListener("mousemove", (e) => {
 
     camera.rot.y -= e.movementX * data.mouseSensitivity;
     camera.rot.x -= e.movementY * data.mouseSensitivity;
-
-    camera.rot.x = Math.max(-90, Math.min(90, camera.rot.x));
 });
 
 window.addEventListener("resize", () => { resize(); });
